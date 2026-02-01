@@ -57,15 +57,17 @@ function Register() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await registerUser(form);
+  e.preventDefault();
+  try {
+    const res = await registerUser(form);   // Axios response
+    if (res.status === 200 || res.status === 201) {
       alert("Registration Successful!");
       navigate("/login");
-    } catch (error) {
-      alert("Registration failed!");
     }
-  };
+  } catch (error) {
+    alert(error.response?.data?.message || "Registration failed!");
+  }
+};
 
   return (
     <div style={container}>

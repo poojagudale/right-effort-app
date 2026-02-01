@@ -11,26 +11,24 @@ function Login() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
+  try {
+    const res = await loginUser(form);   // Axios response
+    const user = res.data;               // backend DTO
 
-    try {
-      const res = await loginUser(form);
-
-      // ✅ Save all user details from backend response
-      localStorage.setItem("role", res.data.role);       // ROLE_USER / ROLE_ADMIN
-      localStorage.setItem("name", res.data.name || "User");
-      localStorage.setItem("email", res.data.email);
-      localStorage.setItem("provider", res.data.provider); // LOCAL or GOOGLE
-      if (res.data.picture) {
-        localStorage.setItem("picture", res.data.picture);
-      }
-
-      // ✅ Redirect to dashboard
-      navigate("/dashboard");
-    } catch (error) {
-      alert("Invalid credentials!");
+    localStorage.setItem("role", user.role);
+    localStorage.setItem("name", user.name || "User");
+    localStorage.setItem("email", user.email);
+    localStorage.setItem("provider", user.provider);
+    if (user.picture) {
+      localStorage.setItem("picture", user.picture);
     }
-  };
+
+    navigate("/dashboard");
+  } catch (error) {
+    alert(error.response?.data?.message || "Invalid credentials!");
+  }
+};
 
   const inputStyle = {
     width: "100%",
