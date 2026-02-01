@@ -3,12 +3,12 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-import UserProfile from "./components/UserProfile";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import GoogleSuccess from "./components/GoogleSuccess";
 import Dashboard from "./components/Dashboard"; // ✅ REQUIRED import
 import NewUser from "./components/NewUser"; // ✅ import NewUser component
+import Profile from "./components/Profile";
 
 // Read stored role
 const getRole = () => localStorage.getItem("role");
@@ -32,7 +32,8 @@ function App() {
         <Route path="/" element={<Register />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/profile" element={<UserProfile />} />
+    
+        <Route path="/profile" element={<Profile />} />
 
         {/* Google OAuth redirect */}
         <Route path="/google/success" element={<GoogleSuccess />} />

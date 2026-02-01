@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import UserProfile from "./UserProfile"; // ✅ import your profile component
-import LeftNav from "./LeftNav"; // ✅ import left navigation
-import Footer from "./Footer"; // ✅ import footer component
+import LeftNav from "./LeftNav";   // ✅ left navigation
+import Footer from "./Footer";     // ✅ footer component
 
 const Dashboard = () => {
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false); // dropdown
-  const [showProfilePopup, setShowProfilePopup] = useState(false); // profile modal
-  const [user, setUser] = useState(null); // ✅ fetch user from backend
+  const [user, setUser] = useState(null);  // ✅ fetch user from backend
 
   useEffect(() => {
-    fetch("http://localhost:8081/api/user/profile", {
-      credentials: "include",
+    fetch("http://localhost:8081/api/users/profile", {  // ✅ corrected endpoint
+      credentials: "include", // ensures cookies/session are sent
     })
       .then((res) => res.json())
       .then((data) => setUser(data))
@@ -39,11 +37,11 @@ const Dashboard = () => {
           <div style={styles.profileWrapper}>
             <div style={styles.profile} onClick={() => setOpen(!open)}>
               <img
-                src={`https://ui-avatars.com/api/?name=${user?.name || "User"}`}
+                src={`https://ui-avatars.com/api/?name=${user?.firstName || "User"}`}
                 alt="profile"
                 style={styles.avatar}
               />
-              <span>{user?.name || "User"}</span>
+              <span>{user?.firstName || "User"}</span>
             </div>
 
             {open && (
@@ -52,7 +50,7 @@ const Dashboard = () => {
                   style={styles.item}
                   onClick={() => {
                     setOpen(false);
-                    setShowProfilePopup(true); // ✅ show popup
+                    navigate("/profile"); // ✅ redirect to profile page
                   }}
                 >
                   Profile
@@ -79,21 +77,6 @@ const Dashboard = () => {
         {/* 🔹 Footer */}
         <Footer />
       </div>
-
-      {/* 🔹 Profile Popup */}
-      {showProfilePopup && (
-        <div style={styles.overlay}>
-          <div style={styles.popup}>
-            <UserProfile /> {/* ✅ reuse actual profile component */}
-            <button
-              style={styles.closeBtn}
-              onClick={() => setShowProfilePopup(false)}
-            >
-              ✖ Close
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
@@ -146,36 +129,10 @@ const styles = {
     overflow: "hidden",
     zIndex: 1000,
   },
-  item: { padding: "10px", cursor: "pointer", borderBottom: "1px solid #eee" },
-  overlay: {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    width: "100vw",
-    height: "100vh",
-    backgroundColor: "rgba(0,0,0,0.5)",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 2000,
-  },
-  popup: {
-    backgroundColor: "#fff",
-    borderRadius: "10px",
-    padding: "20px",
-    width: "500px",
-    maxWidth: "90%",
-    textAlign: "center",
-    boxShadow: "0 6px 20px rgba(0,0,0,0.25)",
-  },
-  closeBtn: {
-    marginTop: "20px",
-    backgroundColor: "#ef4444",
-    color: "#fff",
-    border: "none",
-    borderRadius: "6px",
-    padding: "8px 12px",
+  item: {
+    padding: "10px",
     cursor: "pointer",
+    borderBottom: "1px solid #eee",
   },
 };
 
